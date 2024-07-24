@@ -4,12 +4,25 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:RickAndMorty"
-    Shell.FlyoutBehavior="Disabled"
+    Shell.FlyoutBehavior="Flyout"
+    xmlns:views="clr-namespace:RickAndMorty.Views"
+    xmlns:info="clr-namespace:Microsoft.Maui.ApplicationModel;assembly=Microsoft.Maui.Essentials"
     Title="RickAndMorty">
 
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
+
+    <FlyoutItem Title="RickAndMorty">
+        <Tab>
+            <ShellContent
+                Title="Characters"
+                ContentTemplate="{DataTemplate views:CharactersListPage}"
+                Route="CharactersListPage"
+                />
+        </Tab>
+    </FlyoutItem>
+
 
 </Shell>
