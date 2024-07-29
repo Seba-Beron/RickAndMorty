@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:RickAndMorty.Models"
+             xmlns:vm="clr-namespace:RickAndMorty.ViewModels"
+             x:DataType="vm:CharacterDetailViewModel"
+             x:Class="RickAndMorty.Views.CharacterDetailPage"
+             Title="CharacterDetailPage">
+
+    <Grid ColumnDefinitions="*,*" ColumnSpacing="4">
+
+        <Image
+            Source="{Binding Character.image}"
+            WidthRequest="150" 
+            HeightRequest="150" 
+            Aspect="AspectFill" 
+            VerticalOptions="Start"
+            />
+
+        <StackLayout 
+            Grid.Column="1" 
+            Padding="10"
+            >
+            
+            <Label 
+                Text="{Binding Character.name}"
+                FontSize="Large" 
+                FontAttributes="Bold" 
+                HorizontalOptions="Center" 
+                Margin="0,10,0,0" />
+            <Label 
+                Text="{Binding Character.status}" 
+                HorizontalOptions="Center" />
+            <Label 
+                Text="{Binding Character.species}" 
+                HorizontalOptions="Center" />
+            <Label 
+                Text="{Binding Character.gender}" 
+                HorizontalOptions="Center" />
+            <Label 
+                Text="Origin:" 
+                FontAttributes="Bold" 
+                Margin="0,10,0,0" />
+            <Label 
+                Text="{Binding Character.origin.name}" 
+                HorizontalOptions="Center" />
+            <Label 
+                Text="Last Known Location:" 
+                FontAttributes="Bold" 
+                Margin="0,10,0,0" />
+            <Label 
+                Text="{Binding Character.location.name}" 
+                HorizontalOptions="Center" />
+        </StackLayout>
+
+    </Grid>
+
+</ContentPage>

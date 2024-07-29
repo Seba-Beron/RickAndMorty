@@ -16,15 +16,25 @@ namespace RickAndMorty.Services
             settings = configuration.GetRequiredSection(nameof(Settings)).Get<Settings>();
         }
 
-        public async Task<List<Character>> GetAllCharacter()
+        public async Task<List<Character>> GetAllCharacters(int Page = 1)
         {
-            var response = await client.GetAsync(settings.UrlBase + "character");
-            var body = await response.Content.ReadAsStringAsync();
+            var returnResponse = new List<Character>();
 
-            JsonNode nodes = JsonNode.Parse(body);
-            string results = nodes["results"].ToString();
+            if(Page > 42) return returnResponse; // la api solo tiene 42 paginas
 
-            return JsonSerializer.Deserialize<List<Character>>(results);
+            var response = await client.GetAsync(settings.UrlBase + "character" + "?page=" + Page);
+
+            if(response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+
+                JsonNode nodes = JsonNode.Parse(body);
+                string results = nodes["results"].ToString();
+
+                returnResponse = JsonSerializer.Deserialize<List<Character>>(results);
+            }
+
+            return returnResponse;
         }
     }
 }

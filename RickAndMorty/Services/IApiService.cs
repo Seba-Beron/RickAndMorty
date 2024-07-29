@@ -5,6 +5,6 @@ namespace RickAndMorty.Services
 {
     public interface IApiService
     {
-        public Task<List<Character>> GetAllCharacter();
+        Task<List<Character>> GetAllCharacters(int Page = 1);
     }
 }

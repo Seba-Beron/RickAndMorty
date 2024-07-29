@@ -7,52 +7,47 @@
              x:Class="RickAndMorty.Views.CharactersListPage"
              Title="CharactersListPage">
 
-
-    <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25"
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView 
+            ItemsSource="{Binding CharactersList}"
+            SelectionMode="Single"
+            VerticalScrollBarVisibility="Always"
+            RemainingItemsThreshold="1"
+            RemainingItemsThresholdReachedCommand="{Binding LoadDataCommand}"
+            SelectedItem="{Binding CharacterSelected, Mode=TwoWay}"
+            SelectionChangedCommand="{Binding CharacterEventSelectedCommand}"
             >
-
-            <ActivityIndicator
-                x:Name="Loading"
-                HeightRequest="30"
-                Color="Blue"
-                IsRunning="True"
-                IsVisible="False"
-                />
-
-            <CollectionView 
-                ItemsSource="{Binding CharactersList}"
-                SelectionMode="Single"
-                SelectedItem="{Binding CharacterSelected, Mode=TwoWay}"
-                >
-                <CollectionView.ItemTemplate>
-                    <DataTemplate
-                        x:DataType="model:Character"
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Character">
+                    <StackLayout
+                        Orientation="Horizontal"
+                        Padding="10"
                         >
-                        <StackLayout
-                            Orientation="Horizontal"
-                            Padding="10"
-                            >
-                            <Image 
-                                Source="{Binding image}"
-                                WidthRequest="50" 
-                                HeightRequest="50" 
-                                Aspect="AspectFill"
-                                />
+                        <Image 
+                            Source="{Binding image}"
+                            WidthRequest="50" 
+                            HeightRequest="50" 
+                            Aspect="AspectFill"
+                            />
 
-                            <Label
-                                Text="{Binding name}"
-                                VerticalTextAlignment="Center"
-                                Margin="10,0,0,0"
-                                />
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        <Label
+                            Text="{Binding name}"
+                            VerticalTextAlignment="Center"
+                            Margin="10,0,0,0"
+                            />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
-        </VerticalStackLayout>
-    </ScrollView>
+        <ActivityIndicator
+            Grid.Row="1"
+            x:Name="Loading"
+            HeightRequest="30"
+            Color="Blue"
+            IsRunning="True"
+            IsVisible="{Binding IsBusy}"
+            />
+    </Grid>
 
 </ContentPage>

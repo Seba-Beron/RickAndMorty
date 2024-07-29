@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using RickAndMorty.Services;
 using RickAndMorty.ViewModels;
 using RickAndMorty.Views;
+using ShopApp.Services;
 using System.Reflection;
 
 namespace RickAndMorty
@@ -38,12 +39,16 @@ namespace RickAndMorty
             builder.Services.AddTransient<CharactersListViewModel>();
             builder.Services.AddTransient<CharactersListPage>();
 
-            // inyecto servicio de conexion a la api
+            builder.Services.AddTransient<CharacterDetailViewModel>();
+            builder.Services.AddTransient<CharacterDetailPage>();
+
+            // inyecto servicio
             builder.Services.AddSingleton<HttpClient>();
             builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddSingleton<INavegacionService, NavegacionService>();
 
             // registro las rutas
-            //Routing.RegisterRoute(nameof(CharactersListPage), typeof(CharactersListPage));
+            Routing.RegisterRoute(nameof(CharacterDetailPage), typeof(CharacterDetailPage));
 
 #if DEBUG
             builder.Logging.AddDebug();
