@@ -34,27 +34,9 @@ namespace RickAndMorty
 
             // inyecto la configuracion
             builder.Configuration.AddConfiguration(config);
-            
-            // registro las paginas
-            builder.Services.AddTransient<CharactersListViewModel>();
-            builder.Services.AddTransient<CharactersListPage>();
 
-            builder.Services.AddTransient<CharacterDetailViewModel>();
-            builder.Services.AddTransient<CharacterDetailPage>();
-
-
-            builder.Services.AddTransient<EpisodesListViewModel>();
-            builder.Services.AddTransient<EpisodesListPage>();
-
-            builder.Services.AddTransient<EpisodeDetailViewModel>();
-            builder.Services.AddTransient<EpisodeDetailPage>();
-
-
-            builder.Services.AddTransient<LocationsListViewModel>();
-            builder.Services.AddTransient<LocationsListPage>();
-
-            builder.Services.AddTransient<LocationDetailViewModel>();
-            builder.Services.AddTransient<LocationDetailPage>();
+            // Registro de todas las páginas y ViewModels usando reflección
+            RegisterServices(builder.Services);
 
             // inyecto servicio
             builder.Services.AddSingleton<HttpClient>();
@@ -71,6 +53,32 @@ namespace RickAndMorty
 #endif
 
             return builder.Build();
+        }
+
+        private static void RegisterServices(IServiceCollection services)
+        {
+            // Registrar ViewModels -> registra todas las paginas que hereden de ViewModelGlobal
+            var viewModelType = typeof(ViewModelGlobal); 
+            var assembly = Assembly.GetExecutingAssembly();
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsSubclassOf(viewModelType) && !type.IsAbstract)
+                {
+                    services.AddTransient(type);
+                }
+            }
+
+            // Registrar Pages -> registra todas las paginas que hereden de Page
+            var pageType = typeof(Page);
+
+            foreach (var type in assembly.GetTypes())
+            {
+                if (type.IsSubclassOf(pageType) && !type.IsAbstract)
+                {
+                    services.AddTransient(type);
+                }
+            }
         }
     }
 }
