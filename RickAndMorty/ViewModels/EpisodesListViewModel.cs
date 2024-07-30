@@ -9,21 +9,21 @@ using System.Text.Json;
 
 namespace RickAndMorty.ViewModels
 {
-    public partial class CharactersListViewModel : ViewModelGlobal
+    public partial class EpisodesListViewModel : ViewModelGlobal
     {
         private int Page = 1;
 
         [ObservableProperty]
-        public ObservableCollection<Character> charactersList = [];
+        public ObservableCollection<Episode> episodesList = [];
 
         [ObservableProperty]
-        public Character characterSelected;
+        public Episode episodeSelected;
 
         private readonly ApiService _apiService;
 
         private readonly INavegacionService _navegacionService;
 
-        public CharactersListViewModel(ApiService apiService, INavegacionService navegacionService)
+        public EpisodesListViewModel(ApiService apiService, INavegacionService navegacionService)
         {
             _apiService = apiService;
             _navegacionService = navegacionService;
@@ -38,12 +38,12 @@ namespace RickAndMorty.ViewModels
             try
             {
                 IsBusy = true;
-                var characters = await _apiService.GetAllCharacters(Page);
+                var episodes = await _apiService.GetAllEpisodes(Page);
                 Page++;
 
-                foreach (var character in characters)
+                foreach (var episode in episodes)
                 {
-                    CharactersList.Add(character);
+                    EpisodesList.Add(episode);
                 }
             }
             catch (Exception e)
@@ -57,10 +57,10 @@ namespace RickAndMorty.ViewModels
         }
 
         [RelayCommand]
-        async Task CharacterEventSelected()
+        async Task EpisodeEventSelected()
         {
-            var serializedCharacter = JsonSerializer.Serialize(CharacterSelected);
-            var uri = $"{nameof(CharacterDetailPage)}?characterJson={serializedCharacter}";
+            var serializedEpisode = JsonSerializer.Serialize(EpisodeSelected);
+            var uri = $"{nameof(EpisodeDetailPage)}?episodeJson={serializedEpisode}";
             await _navegacionService.GoToAsync(uri);
         }
     }

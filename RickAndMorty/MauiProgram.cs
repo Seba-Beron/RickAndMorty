@@ -42,6 +42,20 @@ namespace RickAndMorty
             builder.Services.AddTransient<CharacterDetailViewModel>();
             builder.Services.AddTransient<CharacterDetailPage>();
 
+
+            builder.Services.AddTransient<EpisodesListViewModel>();
+            builder.Services.AddTransient<EpisodesListPage>();
+
+            builder.Services.AddTransient<EpisodeDetailViewModel>();
+            builder.Services.AddTransient<EpisodeDetailPage>();
+
+
+            builder.Services.AddTransient<LocationsListViewModel>();
+            builder.Services.AddTransient<LocationsListPage>();
+
+            builder.Services.AddTransient<LocationDetailViewModel>();
+            builder.Services.AddTransient<LocationDetailPage>();
+
             // inyecto servicio
             builder.Services.AddSingleton<HttpClient>();
             builder.Services.AddSingleton<ApiService>();
@@ -49,6 +63,8 @@ namespace RickAndMorty
 
             // registro las rutas
             Routing.RegisterRoute(nameof(CharacterDetailPage), typeof(CharacterDetailPage));
+            Routing.RegisterRoute(nameof(LocationDetailPage), typeof(LocationDetailPage));
+            Routing.RegisterRoute(nameof(EpisodeDetailPage), typeof(EpisodeDetailPage));
 
 #if DEBUG
             builder.Logging.AddDebug();

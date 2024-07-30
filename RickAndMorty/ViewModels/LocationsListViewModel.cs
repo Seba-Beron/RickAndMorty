@@ -9,21 +9,21 @@ using System.Text.Json;
 
 namespace RickAndMorty.ViewModels
 {
-    public partial class CharactersListViewModel : ViewModelGlobal
+    public partial class LocationsListViewModel : ViewModelGlobal
     {
         private int Page = 1;
 
         [ObservableProperty]
-        public ObservableCollection<Character> charactersList = [];
+        public ObservableCollection<Models.Location> locationsList = [];
 
         [ObservableProperty]
-        public Character characterSelected;
+        public Models.Location locationSelected;
 
         private readonly ApiService _apiService;
 
         private readonly INavegacionService _navegacionService;
 
-        public CharactersListViewModel(ApiService apiService, INavegacionService navegacionService)
+        public LocationsListViewModel(ApiService apiService, INavegacionService navegacionService)
         {
             _apiService = apiService;
             _navegacionService = navegacionService;
@@ -38,12 +38,12 @@ namespace RickAndMorty.ViewModels
             try
             {
                 IsBusy = true;
-                var characters = await _apiService.GetAllCharacters(Page);
+                var locations = await _apiService.GetAllLocations(Page);
                 Page++;
 
-                foreach (var character in characters)
+                foreach (var location in locations)
                 {
-                    CharactersList.Add(character);
+                    LocationsList.Add(location);
                 }
             }
             catch (Exception e)
@@ -57,10 +57,10 @@ namespace RickAndMorty.ViewModels
         }
 
         [RelayCommand]
-        async Task CharacterEventSelected()
+        async Task LocationEventSelected()
         {
-            var serializedCharacter = JsonSerializer.Serialize(CharacterSelected);
-            var uri = $"{nameof(CharacterDetailPage)}?characterJson={serializedCharacter}";
+            var serializedlocation = JsonSerializer.Serialize(LocationSelected);
+            var uri = $"{nameof(LocationDetailPage)}?locationJson={serializedlocation}";
             await _navegacionService.GoToAsync(uri);
         }
     }

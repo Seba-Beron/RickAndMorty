@@ -15,12 +15,26 @@
         Route="MainPage" />
 
     <FlyoutItem Title="RickAndMorty">
-        <Tab>
+        <Tab Title="Characters">
             <ShellContent
                 Title="Characters"
                 ContentTemplate="{DataTemplate views:CharactersListPage}"
                 Route="CharactersListPage"
-                />
+            />
+        </Tab>
+        <Tab Title="Episodes">
+            <ShellContent
+                Title="Episodes"
+                ContentTemplate="{DataTemplate views:EpisodesListPage}"
+                Route="EpisodesListPage"
+            />
+        </Tab>
+        <Tab Title="Locations">
+            <ShellContent
+                Title="Locations"
+                ContentTemplate="{DataTemplate views:LocationsListPage}"
+                Route="LocationsListPage"
+            />
         </Tab>
     </FlyoutItem>
 

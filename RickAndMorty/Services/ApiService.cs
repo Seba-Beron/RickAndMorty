@@ -36,5 +36,47 @@ namespace RickAndMorty.Services
 
             return returnResponse;
         }
+
+        public async Task<List<Models.Location>> GetAllLocations(int Page = 1)
+        {
+            var returnResponse = new List<Models.Location>();
+
+            if (Page > 7) return returnResponse; 
+
+            var response = await client.GetAsync(settings.UrlBase + "location" + "?page=" + Page);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+
+                JsonNode nodes = JsonNode.Parse(body);
+                string results = nodes["results"].ToString();
+
+                returnResponse = JsonSerializer.Deserialize<List<Models.Location>>(results);
+            }
+
+            return returnResponse;
+        }
+
+        public async Task<List<Episode>> GetAllEpisodes(int Page = 1)
+        {
+            var returnResponse = new List<Episode>();
+
+            if (Page > 3) return returnResponse; 
+
+            var response = await client.GetAsync(settings.UrlBase + "episode" + "?page=" + Page);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                var body = await response.Content.ReadAsStringAsync();
+
+                JsonNode nodes = JsonNode.Parse(body);
+                string results = nodes["results"].ToString();
+
+                returnResponse = JsonSerializer.Deserialize<List<Episode>>(results);
+            }
+
+            return returnResponse;
+        }
     }
 }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:RickAndMorty.Models"
+             xmlns:vm="clr-namespace:RickAndMorty.ViewModels"
+             x:DataType="vm:EpisodesListViewModel"
+             x:Class="RickAndMorty.Views.EpisodesListPage"
+             Title="EpisodesListPage">
+
+    <Grid RowDefinitions="*,Auto">
+        <CollectionView 
+            ItemsSource="{Binding EpisodesList}"
+            SelectionMode="Single"
+            VerticalScrollBarVisibility="Always"
+            RemainingItemsThreshold="1"
+            RemainingItemsThresholdReachedCommand="{Binding LoadDataCommand}"
+            SelectedItem="{Binding EpisodeSelected, Mode=TwoWay}"
+            SelectionChangedCommand="{Binding EpisodeEventSelectedCommand}"
+        >
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="model:Episode">
+                    <StackLayout
+                        Orientation="Horizontal"
+                        Padding="10"
+                    >
+                        <Label
+                            Text="{Binding id}"
+                            VerticalTextAlignment="Center"
+                            Margin="10,0,0,0"
+                        />
+
+                        <Label
+                            Text="{Binding name}"
+                            VerticalTextAlignment="Center"
+                            Margin="10,0,0,0"
+                        />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <ActivityIndicator
+            Grid.Row="1"
+            x:Name="Loading"
+            HeightRequest="30"
+            Color="Blue"
+            IsRunning="True"
+            IsVisible="{Binding IsBusy}"
+        />
+    </Grid>
+
+</ContentPage>
