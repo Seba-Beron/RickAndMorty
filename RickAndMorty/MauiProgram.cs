@@ -2,7 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using RickAndMorty.Services;
-using RickAndMorty.ViewModels;
 using RickAndMorty.Views;
 using ShopApp.Services;
 using System.Reflection;
@@ -36,7 +35,13 @@ namespace RickAndMorty
             builder.Configuration.AddConfiguration(config);
 
             // Registro de todas las páginas y ViewModels usando reflección
-            RegisterServices(builder.Services);
+            // Obtiene el ensamblado actual y registra todas las clases derivadas de ViewModelGlobal o Page
+            Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(type => (type.IsSubclassOf(typeof(ViewModelGlobal)) || type.IsSubclassOf(typeof(Page))) && !type.IsAbstract)
+                .ToList()
+                .ForEach(type => builder.Services.AddTransient(type));
+
 
             // inyecto servicio
             builder.Services.AddSingleton<HttpClient>();
@@ -53,32 +58,6 @@ namespace RickAndMorty
 #endif
 
             return builder.Build();
-        }
-
-        private static void RegisterServices(IServiceCollection services)
-        {
-            // Registrar ViewModels -> registra todas las paginas que hereden de ViewModelGlobal
-            var viewModelType = typeof(ViewModelGlobal); 
-            var assembly = Assembly.GetExecutingAssembly();
-
-            foreach (var type in assembly.GetTypes())
-            {
-                if (type.IsSubclassOf(viewModelType) && !type.IsAbstract)
-                {
-                    services.AddTransient(type);
-                }
-            }
-
-            // Registrar Pages -> registra todas las paginas que hereden de Page
-            var pageType = typeof(Page);
-
-            foreach (var type in assembly.GetTypes())
-            {
-                if (type.IsSubclassOf(pageType) && !type.IsAbstract)
-                {
-                    services.AddTransient(type);
-                }
-            }
         }
     }
 }
