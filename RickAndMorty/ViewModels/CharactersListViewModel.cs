@@ -6,27 +6,53 @@ using RickAndMorty.Views;
 using ShopApp.Services;
 using System.Collections.ObjectModel;
 using System.Text.Json;
+using System.Windows.Input;
 
 namespace RickAndMorty.ViewModels
 {
     public partial class CharactersListViewModel : ViewModelGlobal
     {
+        private readonly ApiService _apiService;
+        private readonly INavegacionService _navegacionService;
+
         private int Page = 1;
 
         [ObservableProperty]
-        public ObservableCollection<Character> charactersList = [];
+        private ObservableCollection<Character> charactersList = [];
 
         [ObservableProperty]
-        public Character characterSelected;
+        private Character characterSelected;
 
-        private readonly ApiService _apiService;
+        [ObservableProperty]
+        private ObservableCollection<string> statusOptions = ["Alive", "Dead", "unknown"];
 
-        private readonly INavegacionService _navegacionService;
+        [ObservableProperty]
+        private ObservableCollection<string> genderOptions = ["Female", "Male", "Genderless", "unknown"];
+
+        [ObservableProperty]
+        private string selectedStatus;
+        partial void OnSelectedStatusChanged(string value) => FilterChanged();
+
+        [ObservableProperty]
+        private string selectedGender;
+        partial void OnSelectedGenderChanged(string value) => FilterChanged();
+
+        [ObservableProperty]
+        private string searchText;
+        partial void OnSearchTextChanged(string value) => FilterChanged();
+        
 
         public CharactersListViewModel(ApiService apiService, INavegacionService navegacionService)
         {
             _apiService = apiService;
             _navegacionService = navegacionService;
+            LoadDataCommand.Execute(this);
+        }
+
+        private void FilterChanged()
+        {
+            CharactersList.Clear();
+            Page = 1;
             LoadDataCommand.Execute(this);
         }
 
@@ -38,7 +64,7 @@ namespace RickAndMorty.ViewModels
             try
             {
                 IsBusy = true;
-                var characters = await _apiService.GetAllCharacters(Page);
+                var characters = await _apiService.GetAllCharacters(Page, SearchText, selectedStatus, selectedGender);
                 Page++;
 
                 foreach (var character in characters)

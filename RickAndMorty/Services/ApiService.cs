@@ -16,13 +16,18 @@ namespace RickAndMorty.Services
             settings = configuration.GetRequiredSection(nameof(Settings)).Get<Settings>();
         }
 
-        public async Task<List<Character>> GetAllCharacters(int Page = 1)
+        public async Task<List<Character>> GetAllCharacters(int Page = 1, string Name = "", string Status = "", string Gender = "")
         {
             var returnResponse = new List<Character>();
 
-            if(Page > 42) return returnResponse; // la api solo tiene 42 paginas
+            if (Page > 42) return returnResponse; // la api solo tiene 42 paginas
 
-            var response = await client.GetAsync(settings.UrlBase + "character" + "?page=" + Page);
+            var url = $"{settings.UrlBase}character?page={Page}" +
+                $"{(string.IsNullOrWhiteSpace(Name) ? "" : $"&name={Name}")}" +
+                $"{(string.IsNullOrWhiteSpace(Status) ? "" : $"&status={Status}")}" +
+                $"{(string.IsNullOrWhiteSpace(Gender) ? "" : $"&gender={Gender}")}";
+
+            var response = await client.GetAsync(url);
 
             if(response.StatusCode == System.Net.HttpStatusCode.OK)
             {

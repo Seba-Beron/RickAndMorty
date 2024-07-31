@@ -5,49 +5,75 @@
              xmlns:vm="clr-namespace:RickAndMorty.ViewModels"
              x:DataType="vm:CharactersListViewModel"
              x:Class="RickAndMorty.Views.CharactersListPage"
+             Shell.NavBarIsVisible="false" 
              Title="CharactersListPage">
 
-    <Grid RowDefinitions="*,Auto">
-        <CollectionView 
+    <Grid RowDefinitions="50,*,Auto" Padding="10">
+
+        <StackLayout Orientation="Horizontal">
+            <SearchBar
+                WidthRequest="200"
+                Placeholder="Search..."
+                Text="{Binding SearchText, Mode=TwoWay}" 
+            />
+            <Picker 
+                x:Name="StatusPicker"
+                WidthRequest="80"
+                Title="Status"
+                ItemsSource="{Binding StatusOptions}"
+                SelectedItem="{Binding SelectedStatus, Mode=TwoWay}">
+            </Picker>
+            <Picker 
+                x:Name="GenderPicker"
+                WidthRequest="80"
+                Title="Gender"
+                ItemsSource="{Binding GenderOptions}"
+                SelectedItem="{Binding SelectedGender, Mode=TwoWay}">
+            </Picker>
+        </StackLayout>
+
+        
+
+        <CollectionView
+            Grid.Row="1"
             ItemsSource="{Binding CharactersList}"
             SelectionMode="Single"
             VerticalScrollBarVisibility="Always"
-            RemainingItemsThreshold="1"
-            RemainingItemsThresholdReachedCommand="{Binding LoadDataCommand}"
+            
             SelectedItem="{Binding CharacterSelected, Mode=TwoWay}"
             SelectionChangedCommand="{Binding CharacterEventSelectedCommand}"
-            >
+        >
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="model:Character">
                     <StackLayout
                         Orientation="Horizontal"
                         Padding="10"
-                        >
+                    >
                         <Image 
                             Source="{Binding image}"
                             WidthRequest="50" 
                             HeightRequest="50" 
                             Aspect="AspectFill"
-                            />
+                        />
 
                         <Label
                             Text="{Binding name}"
                             VerticalTextAlignment="Center"
                             Margin="10,0,0,0"
-                            />
+                        />
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
         <ActivityIndicator
-            Grid.Row="1"
+            Grid.Row="2"
             x:Name="Loading"
             HeightRequest="30"
             Color="Blue"
             IsRunning="True"
             IsVisible="{Binding IsBusy}"
-            />
+        />
     </Grid>
 
 </ContentPage>
